@@ -38,12 +38,13 @@ const steps = [
 
 // ─── Canvas beam particle system ────────────────────────────────────────────
 function BeamParticles() {
-    const canvasRef = useRef(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        if (!canvas) return;
+        if (!canvas || !canvas.parentElement) return;
         const ctx = canvas.getContext("2d");
+        if (!ctx) return;
         const dpr = window.devicePixelRatio || 1;
         const W = 700;
         const H = canvas.parentElement.offsetHeight;
@@ -230,13 +231,13 @@ function HorizontalParticles() {
 
 // ─── Main component ──────────────────────────────────────────────────────────
 export default function ClearProcess() {
-    const wrapperRef = useRef(null);
-    const stepRefs = useRef<HTMLDivElement[] | null>([]);
-    const headerRef = useRef(null);
-    const ctaRef = useRef(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const headerRef = useRef<HTMLDivElement>(null);
+    const ctaRef = useRef<HTMLDivElement>(null);
 
     const [beamProgress, setBeamProgress] = useState(0);
-    const [visibleSteps, setVisibleSteps] = useState(new Set());
+    const [visibleSteps, setVisibleSteps] = useState<Set<number>>(new Set());
     const [headerVisible, setHeaderVisible] = useState(false);
     const [ctaVisible, setCtaVisible] = useState(false);
 
@@ -244,7 +245,7 @@ export default function ClearProcess() {
     useEffect(() => {
         let target = 0;
         let current = 0;
-        let rafId = null;
+        let rafId: number | null = null;
 
         const getTarget = () => {
             const el = wrapperRef.current;
@@ -272,7 +273,7 @@ export default function ClearProcess() {
         rafId = requestAnimationFrame(tick);
         return () => {
             window.removeEventListener("scroll", onScroll);
-            cancelAnimationFrame(rafId);
+            if (rafId !== null) cancelAnimationFrame(rafId);
         };
     }, []);
 
@@ -385,7 +386,7 @@ export default function ClearProcess() {
                         return (
                             <div
                                 key={step.num}
-                                ref={el => (stepRefs.current[i] = el)}
+                                ref={el => { stepRefs.current[i] = el; }}
                                 style={styles.stepRow}
                             >
                                 {step.side === "left" ? (
@@ -490,7 +491,7 @@ export default function ClearProcess() {
 }
 
 // ─── Step card content ───────────────────────────────────────────────────────
-function StepContent({ step }: { step: any }) {
+function StepContent({ step }: { step: { num: string; title: string; body: string; bold?: string; } }) {
     return (
         <>
             <h2 style={styles.stepTitle}>

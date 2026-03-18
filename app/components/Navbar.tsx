@@ -1,12 +1,13 @@
 import React from "react";
-import GlassContainerReusableV2 from "./GlassContainerReusableV2";
+import GlassContainer from "./GlassContainer";
+import GlassButton from "./GlassButton";
 
 const navItems = ["Home", "Labs", "Case Studies", "How It Works", "FAQ"];
 
 const Navbar = () => {
     return (
         <div className="fixed top-0 left-0 right-0 mt-8 flex justify-center z-[1000]">
-            <GlassContainerReusableV2 width="80%" height={70}>
+            <GlassContainer width="80%" height={70}>
                 <div className="flex justify-center items-center  w-full h-full px-10 box-border">
 
                     {/* Left — Logo */}
@@ -29,12 +30,14 @@ const Navbar = () => {
 
                     {/* Right — CTA */}
 
-                    <button className=" shrink-0 px-5 py-2.5 bg-white text-black font-bold text-sm rounded-md cursor-pointer border-none hover:bg-gray-200 hover:scale-105 active:scale-95 transition-all duration-150">
-                        GET IN TOUCH
-                    </button>
+                    <GlassButton>
+                        <span className="px-5 py-2.5 text-white flex justify-center items-center ">
+                            GET IN TOUCH
+                        </span>
+                    </GlassButton>
 
                 </div>
-            </GlassContainerReusableV2>
+            </GlassContainer>
         </div>
     );
 };

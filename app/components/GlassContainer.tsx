@@ -1,4 +1,4 @@
-export default function GlassContainerReusableV2({ width, height, children, style, className }: { children: React.ReactNode, width: any, height: any, style?: React.CSSProperties, className?: string }) {
+export default function GlassContainer({ width, height, children, style, className }: { children: React.ReactNode, width: any, height: any, style?: React.CSSProperties, className?: string }) {
   return (
     <>
       <style>{`
@@ -29,12 +29,12 @@ export default function GlassContainerReusableV2({ width, height, children, styl
 background: linear-gradient(
   to bottom,
   rgba(118, 154, 252,0.6),
-  rgba(118, 154, 252, 0.3),
-    rgba(118, 154, 252, 0.3),
+  rgba(118, 154, 252, 0.2),
+    rgba(118, 154, 252, 0.2),
 
-      rgba(118, 154, 252, 0.3),
+      rgba(118, 154, 252, 0.2),
 
-  rgba(67, 107, 254, 0.3),
+  rgba(67, 107, 254, 0.2),
   rgba(118, 154, 252,0.6)
 );
 
@@ -68,14 +68,14 @@ background: linear-gradient(
   inset: 0;
   border-radius: 10px;
 
-  padding: 1.5px; /* thickness */
+  padding: 1px; /* thickness */
 
   background: linear-gradient(
     135deg,
-    rgba(255,255,255,0.9),
+    rgba(255,255,255,0.6),
     rgba(180,200,255,0.6),
     rgba(120,150,255,0.4),
-    rgba(255,255,255,0.8)
+    rgba(30, 76, 245, 0.2)
   );
 
   -webkit-mask: 

@@ -1,6 +1,7 @@
 import React from "react";
 import GlassContainer from "./GlassContainer";
 import GlassButton from "./GlassButton";
+import GlassyButton from "./GlassyButton";
 
 const navItems = ["Home", "Labs", "Case Studies", "How It Works", "FAQ"];
 
@@ -29,12 +30,14 @@ const Navbar = () => {
                     </nav>
 
                     {/* Right — CTA */}
-
-                    <GlassButton>
-                        <span className="px-5 py-2.5 text-white flex justify-center items-center ">
-                            GET IN TOUCH
-                        </span>
-                    </GlassButton>
+                    <div className="bg-blue-500/50 rounded-lg">
+                        <GlassButton>
+                            <span className="px-5 py-2.5 text-white flex justify-center items-center ">
+                                GET IN TOUCH
+                            </span>
+                        </GlassButton>
+                    </div>
+                    {/* <GlassyButton /> */}
 
                 </div>
             </GlassContainer>

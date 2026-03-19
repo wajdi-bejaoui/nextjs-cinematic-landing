@@ -30,8 +30,10 @@ const Background: React.FC<BackgroundProps> = ({
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      // const width = window.innerWidth;
+      // const height = window.innerHeight;
+      const width = document.documentElement.clientWidth;
+      const height = document.documentElement.clientHeight;
 
       canvas.width = width * dpr;
       canvas.height = height * dpr;

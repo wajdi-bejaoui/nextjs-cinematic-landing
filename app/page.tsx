@@ -10,8 +10,6 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <CinematicScrollReveal />
-      {/* <CinematicRevealSection /> */}
-
       <HowItWorksSection />
 
     </>

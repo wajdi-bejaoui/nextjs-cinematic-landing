@@ -1,4 +1,4 @@
-# Frontend Assessment - Landing Page
+# Nextjs Cinematic Landing Page
 
 A modern, interactive frontend landing page. This project leverages the latest web technologies to deliver a stunning, high-performance user experience, featuring cinematic scroll animations.
 

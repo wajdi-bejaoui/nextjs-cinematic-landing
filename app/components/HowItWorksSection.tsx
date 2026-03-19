@@ -121,115 +121,124 @@ function HorizontalParticles() {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        const dpr = window.devicePixelRatio || 1;
-        const W = window.innerWidth;
-        const H = 220;
-
-        canvas.width = W * dpr;
-        canvas.height = H * dpr;
-        canvas.style.width = W + "px";
-        canvas.style.height = H + "px";
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        const cx = W / 2;
-        // const cy = H * 0.72;
-        // const COUNT = 7000;
-        const COUNT = 14000; // was 7000
+        const draw = () => {
 
 
-        const dots = Array.from({ length: COUNT }).map(() => {
-            const tRaw = Math.random();
-            // const tBiased = Math.pow(tRaw, 0.55);
-            const tBiased = Math.pow(tRaw, 0.80); // even flatter curve = more mass near cx
+            const dpr = window.devicePixelRatio || 1;
+            const W = window.innerWidth;
+            const H = 220;
 
-            const sign = Math.random() < 0.5 ? -1 : 1;
-            const x = cx + sign * tBiased * (W * 0.5 + 40);
+            canvas.width = W * dpr;
+            canvas.height = H * dpr;
+            canvas.style.width = W + "px";
+            canvas.style.height = H + "px";
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-            const proximity = 1 - tBiased;
-            // const vSpread = 6 + proximity * 44;
-            // const y = cy + (Math.random() - 0.5) * 2 * vSpread;
-            const baseCy = H * 0.65 + (Math.random() - 0.5) * H * 0.3; // drifting center
-            const vSpread = 18 + proximity * 90 + Math.random() * 40;   // much wider + noisy
-            const y = baseCy + (Math.random() - 0.5) * 2 * vSpread;
-
-            // const coreFactor = Math.pow(proximity, 1.4);
-            const coreFactor = Math.pow(proximity, 0.7); // <1 = more particles feel "core-like"
-
-            // const alpha = 0.15 + coreFactor * 0.65 + Math.random() * 0.1;
-            // const alpha = 0.08 + coreFactor * 0.45 + Math.random() * 0.18;
-            const alpha = 0.06 + coreFactor * 0.75 + Math.random() * 0.15; // higher peak at center
+            const cx = W / 2;
+            // const cy = H * 0.72;
+            // const COUNT = 7000;
+            const COUNT = 14000; // was 7000
 
 
-            const r = 0.1 + Math.random() * 0.35;
-            const r_ch = Math.floor(140 + coreFactor * 115);
-            const g_ch = Math.floor(170 + coreFactor * 85);
+            const dots = Array.from({ length: COUNT }).map(() => {
+                const tRaw = Math.random();
+                // const tBiased = Math.pow(tRaw, 0.55);
+                const tBiased = Math.pow(tRaw, 0.80); // even flatter curve = more mass near cx
 
-            return { x, y, r, alpha, r_ch, g_ch, coreFactor };
-        });
+                const sign = Math.random() < 0.5 ? -1 : 1;
+                const x = cx + sign * tBiased * (W * 0.5 + 40);
 
-        // Glow pass
-        for (const d of dots) {
-            if (d.r > 0.32) {
-                ctx.globalAlpha = d.alpha * 0.2;
-                const grad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r * 4);
-                grad.addColorStop(0, `rgba(${d.r_ch}, ${d.g_ch}, 255, 1)`);
-                grad.addColorStop(1, "rgba(80,130,255,0)");
-                ctx.fillStyle = grad;
+                const proximity = 1 - tBiased;
+                // const vSpread = 6 + proximity * 44;
+                // const y = cy + (Math.random() - 0.5) * 2 * vSpread;
+                const baseCy = H * 0.65 + (Math.random() - 0.5) * H * 0.3; // drifting center
+                const vSpread = 18 + proximity * 90 + Math.random() * 40;   // much wider + noisy
+                const y = baseCy + (Math.random() - 0.5) * 2 * vSpread;
+
+                // const coreFactor = Math.pow(proximity, 1.4);
+                const coreFactor = Math.pow(proximity, 0.7); // <1 = more particles feel "core-like"
+
+                // const alpha = 0.15 + coreFactor * 0.65 + Math.random() * 0.1;
+                // const alpha = 0.08 + coreFactor * 0.45 + Math.random() * 0.18;
+                const alpha = 0.06 + coreFactor * 0.75 + Math.random() * 0.15; // higher peak at center
+
+
+                const r = 0.1 + Math.random() * 0.35;
+                const r_ch = Math.floor(140 + coreFactor * 115);
+                const g_ch = Math.floor(170 + coreFactor * 85);
+
+                return { x, y, r, alpha, r_ch, g_ch, coreFactor };
+            });
+
+            // Glow pass
+            for (const d of dots) {
+                if (d.r > 0.32) {
+                    ctx.globalAlpha = d.alpha * 0.2;
+                    const grad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r * 4);
+                    grad.addColorStop(0, `rgba(${d.r_ch}, ${d.g_ch}, 255, 1)`);
+                    grad.addColorStop(1, "rgba(80,130,255,0)");
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    ctx.arc(d.x, d.y, d.r * 4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // Core dots pass
+            for (const d of dots) {
+                ctx.globalAlpha = d.alpha;
+                ctx.fillStyle = `rgb(${d.r_ch}, ${d.g_ch}, 255)`;
                 ctx.beginPath();
-                ctx.arc(d.x, d.y, d.r * 4, 0, Math.PI * 2);
+                ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
                 ctx.fill();
             }
+
+            ctx.globalAlpha = 1;
+
+            // ── Edge fades via destination-out masks ──────────────────────────────
+            ctx.globalCompositeOperation = "destination-out";
+
+            // Left fade
+            // const fadeW = W * 0.18; // how far inward the fade reaches
+            const fadeW = W * 0.28; // was 0.18
+
+            const leftGrad = ctx.createLinearGradient(0, 0, fadeW, 0);
+            leftGrad.addColorStop(0, "rgba(0,0,0,1)");
+            leftGrad.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = leftGrad;
+            ctx.fillRect(0, 0, fadeW, H);
+
+            // Right fade
+            const rightGrad = ctx.createLinearGradient(W - fadeW, 0, W, 0);
+            rightGrad.addColorStop(0, "rgba(0,0,0,0)");
+            rightGrad.addColorStop(1, "rgba(0,0,0,1)");
+            ctx.fillStyle = rightGrad;
+            ctx.fillRect(W - fadeW, 0, fadeW, H);
+
+            // Top fade
+            const topFadeH = H * 0.38;
+            const topGrad = ctx.createLinearGradient(0, 0, 0, topFadeH);
+            topGrad.addColorStop(0, "rgba(0,0,0,1)");
+            topGrad.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = topGrad;
+            ctx.fillRect(0, 0, W, topFadeH);
+
+            // Bottom fade
+            const botFadeH = H * 0.22;
+            const botGrad = ctx.createLinearGradient(0, H - botFadeH, 0, H);
+            botGrad.addColorStop(0, "rgba(0,0,0,0)");
+            botGrad.addColorStop(1, "rgba(0,0,0,1)");
+            ctx.fillStyle = botGrad;
+            ctx.fillRect(0, H - botFadeH, W, botFadeH);
+
+            // Reset composite mode
+            ctx.globalCompositeOperation = "source-over";
         }
+        draw(); // initial draw
 
-        // Core dots pass
-        for (const d of dots) {
-            ctx.globalAlpha = d.alpha;
-            ctx.fillStyle = `rgb(${d.r_ch}, ${d.g_ch}, 255)`;
-            ctx.beginPath();
-            ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        ctx.globalAlpha = 1;
-
-        // ── Edge fades via destination-out masks ──────────────────────────────
-        ctx.globalCompositeOperation = "destination-out";
-
-        // Left fade
-        // const fadeW = W * 0.18; // how far inward the fade reaches
-        const fadeW = W * 0.28; // was 0.18
-
-        const leftGrad = ctx.createLinearGradient(0, 0, fadeW, 0);
-        leftGrad.addColorStop(0, "rgba(0,0,0,1)");
-        leftGrad.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = leftGrad;
-        ctx.fillRect(0, 0, fadeW, H);
-
-        // Right fade
-        const rightGrad = ctx.createLinearGradient(W - fadeW, 0, W, 0);
-        rightGrad.addColorStop(0, "rgba(0,0,0,0)");
-        rightGrad.addColorStop(1, "rgba(0,0,0,1)");
-        ctx.fillStyle = rightGrad;
-        ctx.fillRect(W - fadeW, 0, fadeW, H);
-
-        // Top fade
-        const topFadeH = H * 0.38;
-        const topGrad = ctx.createLinearGradient(0, 0, 0, topFadeH);
-        topGrad.addColorStop(0, "rgba(0,0,0,1)");
-        topGrad.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = topGrad;
-        ctx.fillRect(0, 0, W, topFadeH);
-
-        // Bottom fade
-        const botFadeH = H * 0.22;
-        const botGrad = ctx.createLinearGradient(0, H - botFadeH, 0, H);
-        botGrad.addColorStop(0, "rgba(0,0,0,0)");
-        botGrad.addColorStop(1, "rgba(0,0,0,1)");
-        ctx.fillStyle = botGrad;
-        ctx.fillRect(0, H - botFadeH, W, botFadeH);
-
-        // Reset composite mode
-        ctx.globalCompositeOperation = "source-over";
+        const onResize = () => draw();
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
     }, []);
 
     return (

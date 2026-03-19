@@ -625,7 +625,7 @@ const styles: Record<string, CSSProperties> = {
         transform: "translateX(-50%)",
         width: "1.5px",
         background:
-            "linear-gradient(to bottom, transparent 0%, transparent 13%, rgba(255,255,255,0.2) 19%, rgba(63, 79, 254, 0.85) 28%, #ffffffff 45%, #ffffff 95%, transparent 100%)",
+            "linear-gradient(to bottom, transparent 0%, transparent 13%, rgba(79, 110, 247, 0.2) 19%, rgba(63, 79, 254, 0.85) 28%, #ffffffff 45%, #ffffff 95%, transparent 100%)",
         animation: "beamCorePulse 2s ease-in-out infinite",
     },
 

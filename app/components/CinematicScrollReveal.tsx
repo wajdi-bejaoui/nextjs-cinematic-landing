@@ -21,18 +21,19 @@ export default function CinematicScrollReveal() {
         <section
             ref={sectionRef}
             style={{
-                height: "100vh",
+                minHeight: "100vh",               // min- so content never clips
                 background: "#000",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                padding: "4rem 0",               // vertical breathing room on mobile
             }}
         >
             <div
                 style={{
                     position: "relative",
                     width: "100%",
-                    height: "400px",
+                    height: "clamp(320px, 60vw, 400px)",  // responsive, not fixed
                 }}
             >
                 <NeonScrollLine progress={scrollYProgress} />
@@ -211,7 +212,7 @@ function ScrollTextReveal({ progress }: { progress: MotionValue<number> }) {
                 alignItems: "center",
                 justifyContent: "center",
                 zIndex: 2,
-                padding: "0 2rem",
+                padding: "0 clamp(1rem, 5vw, 2rem)",   // responsive horizontal padding
             }}
         >
             <div
@@ -219,16 +220,16 @@ function ScrollTextReveal({ progress }: { progress: MotionValue<number> }) {
                     textAlign: "center",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "0.5rem",
-                    maxWidth: "80%",
+                    gap: "clamp(0.4rem, 1.5vw, 0.75rem)",  // more gap on larger screens
+                    maxWidth: "min(92%, 720px)",            // generous on mobile, capped on desktop
                 }}
             >
                 {allWords.map((words, lineIndex) => (
                     <p
                         key={lineIndex}
                         style={{
-                            fontSize: "clamp(1.2rem, 3vw, 2.2rem)",
-                            lineHeight: 1.35,
+                            fontSize: "clamp(0.95rem, 3vw, 2.2rem)",  // slightly smaller floor for mobile
+                            lineHeight: 1.45,                           // a touch more line height for readability
                             fontWeight: 300,
                             margin: 0,
                         }}

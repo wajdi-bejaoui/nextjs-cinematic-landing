@@ -59,7 +59,9 @@ function BeamParticles() {
         const COUNT = 2200;
 
         const dots = Array.from({ length: COUNT }).map(() => {
-            const yFrac = Math.random();
+            // const yFrac = Math.random();
+            const yFrac = Math.random() * 0.90; // particles only occupy top 90% of canvas
+
             const spread = 8 + yFrac * yFrac * 72;
             const x = cx + (Math.random() - 0.5) * 2 * spread;
             const y = yFrac * H;
@@ -130,21 +132,34 @@ function HorizontalParticles() {
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
         const cx = W / 2;
-        const cy = H * 0.72;
-        const COUNT = 7000;
+        // const cy = H * 0.72;
+        // const COUNT = 7000;
+        const COUNT = 14000; // was 7000
+
 
         const dots = Array.from({ length: COUNT }).map(() => {
             const tRaw = Math.random();
-            const tBiased = Math.pow(tRaw, 0.55);
+            // const tBiased = Math.pow(tRaw, 0.55);
+            const tBiased = Math.pow(tRaw, 0.80); // even flatter curve = more mass near cx
+
             const sign = Math.random() < 0.5 ? -1 : 1;
             const x = cx + sign * tBiased * (W * 0.5 + 40);
 
             const proximity = 1 - tBiased;
-            const vSpread = 6 + proximity * 44;
-            const y = cy + (Math.random() - 0.5) * 2 * vSpread;
+            // const vSpread = 6 + proximity * 44;
+            // const y = cy + (Math.random() - 0.5) * 2 * vSpread;
+            const baseCy = H * 0.65 + (Math.random() - 0.5) * H * 0.3; // drifting center
+            const vSpread = 18 + proximity * 90 + Math.random() * 40;   // much wider + noisy
+            const y = baseCy + (Math.random() - 0.5) * 2 * vSpread;
 
-            const coreFactor = Math.pow(proximity, 1.4);
-            const alpha = 0.15 + coreFactor * 0.65 + Math.random() * 0.1;
+            // const coreFactor = Math.pow(proximity, 1.4);
+            const coreFactor = Math.pow(proximity, 0.7); // <1 = more particles feel "core-like"
+
+            // const alpha = 0.15 + coreFactor * 0.65 + Math.random() * 0.1;
+            // const alpha = 0.08 + coreFactor * 0.45 + Math.random() * 0.18;
+            const alpha = 0.06 + coreFactor * 0.75 + Math.random() * 0.15; // higher peak at center
+
+
             const r = 0.1 + Math.random() * 0.35;
             const r_ch = Math.floor(140 + coreFactor * 115);
             const g_ch = Math.floor(170 + coreFactor * 85);
@@ -181,7 +196,9 @@ function HorizontalParticles() {
         ctx.globalCompositeOperation = "destination-out";
 
         // Left fade
-        const fadeW = W * 0.18; // how far inward the fade reaches
+        // const fadeW = W * 0.18; // how far inward the fade reaches
+        const fadeW = W * 0.28; // was 0.18
+
         const leftGrad = ctx.createLinearGradient(0, 0, fadeW, 0);
         leftGrad.addColorStop(0, "rgba(0,0,0,1)");
         leftGrad.addColorStop(1, "rgba(0,0,0,0)");
@@ -322,10 +339,10 @@ export default function ClearProcess() {
         <div ref={wrapperRef} style={styles.root}>
 
             {/* ── Beam: outer glow — always fully visible ── */}
-            <div style={styles.beamContainer}>
+            {/* <div style={styles.beamContainer}>
                 <div style={styles.beamSpread} />
                 <div style={styles.beamGlowOuter} />
-            </div>
+            </div> */}
 
             {/* ── Beam: inner core — reveals progressively on scroll ── */}
             <div
@@ -339,11 +356,11 @@ export default function ClearProcess() {
                 <div style={styles.beamCoreGlow} />
                 <div style={styles.beamCore} />
                 <BeamParticles />
-                <div style={styles.burstWide} />
+                {/* <div style={styles.burstWide} />
                 <div style={styles.burstMid} />
                 <div style={styles.burstTight} />
                 <div style={styles.burstCore} />
-                <div style={styles.burstFlare} />
+                <div style={styles.burstFlare} /> */}
             </div>
 
             {/* ── Content ── */}
@@ -558,31 +575,31 @@ const styles: Record<string, CSSProperties> = {
     beamGlowMid: {
         position: "absolute",
         top: 0,
-        bottom: "70px",
+        bottom: "160px",
         left: "50%",
         transform: "translateX(-50%)",
         width: "60px",
         background:
-            "linear-gradient(to bottom, transparent 0%, rgba(100,150,255,0.25) 8%, rgba(130,180,255,0.6) 40%, rgba(160,210,255,0.88) 75%, rgba(200,230,255,1) 97%, transparent 100%)",
+            "linear-gradient(to bottom, transparent 0%, rgba(40, 107, 252, 0.25) 8%, rgba(57, 135, 253, 0.6) 40%, rgba(54, 161, 255, 0.88) 75%, rgba(68, 170, 253, 1) 97%, transparent 100%)",
         filter: "blur(7px)",
         animation: "beamPulse 3s ease-in-out infinite",
     },
     beamGlowInner: {
         position: "absolute",
         top: 0,
-        bottom: "55px",
+        bottom: "160px",
         left: "50%",
         transform: "translateX(-50%)",
         width: "18px",
         background:
-            "linear-gradient(to bottom, transparent 0%, rgba(180,215,255,0.5) 6%, rgba(210,235,255,0.92) 40%, rgba(230,245,255,1) 80%, #ffffff 98%, transparent 100%)",
+            "linear-gradient(to bottom, transparent 0%, rgba(180,215,255,0.5) 6%, rgba(113, 190, 252, 0.92) 40%, rgba(92, 190, 255, 1) 80%, #ffffff 98%, transparent 100%)",
         filter: "blur(3px)",
         animation: "beamCorePulse 2.5s ease-in-out infinite",
     },
     beamCoreGlow: {
         position: "absolute",
         top: 0,
-        bottom: "52px",
+        bottom: "160px",
         left: "50%",
         transform: "translateX(-50%)",
         width: "8px",
@@ -594,12 +611,12 @@ const styles: Record<string, CSSProperties> = {
     beamCore: {
         position: "absolute",
         top: 0,
-        bottom: "50px",
+        bottom: "160px",
         left: "50%",
         transform: "translateX(-50%)",
         width: "1.5px",
         background:
-            "linear-gradient(to bottom, transparent 0%, transparent 13%, rgba(255,255,255,0.2) 19%, rgba(255,255,255,0.85) 28%, #ffffff 45%, #ffffff 95%, transparent 100%)",
+            "linear-gradient(to bottom, transparent 0%, transparent 13%, rgba(255,255,255,0.2) 19%, rgba(63, 79, 254, 0.85) 28%, #ffffffff 45%, #ffffff 95%, transparent 100%)",
         animation: "beamCorePulse 2s ease-in-out infinite",
     },
 
@@ -796,6 +813,7 @@ const styles: Record<string, CSSProperties> = {
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
+        marginBottom: "80px",
     },
 
     ctaBeamShaft: {

@@ -9,10 +9,10 @@ const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
-        <div className="fixed top-0 left-0 right-0 mt-8 flex flex-col items-center z-[1000] px-4">
+        <div className="fixed top-0 left-0 right-0 mt-4 sm:mt-8 flex flex-col items-center z-[1000] px-4">
             {/* Main Navbar — full width on mobile, 80% on desktop */}
             <div className="w-full md:w-4/5">
-                <GlassContainer width="100%" height={70}>
+                <GlassContainer width="100%" height={60}>
                     <div className="flex justify-between items-center w-full h-full px-6 box-border">
 
                         {/* Left — Logo */}
